@@ -15,6 +15,8 @@ const MONGODB_URI = `mongodb+srv://${username}:${password}@cluster0.o8mxmhh.mong
 
 //import routes
 const establishmentRoutes = require('./routes/establishment');
+const messengerRoutes = require('./routes/messenger');
+
 
 app.use((req, res, next) => {
     // Fix CORS error
@@ -26,6 +28,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use(establishmentRoutes);
+app.use(messengerRoutes);
 
 const connectDB = async () => {
     try {

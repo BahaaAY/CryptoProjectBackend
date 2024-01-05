@@ -7,14 +7,20 @@ const messageSchema = new Schema({
         type: String,
         required: true
     },
-    sender: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+    sender_key: {
+        type: String,
+        required: true
+
     },
-    receiver: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+    receiver_key: {
+        type: String,
+        required: true
+    },
+    AesKey:{
+        type: String,
+        required: true
     }
+     
 });
 
 module.exports = mongoose.model("Message", messageSchema);
