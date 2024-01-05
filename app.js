@@ -1,8 +1,41 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+
 const app = express();
+
 const port = 3000;
 
+//db username and password
+const username = require("./util/credentials").username;
+const password = require("./util/credentials").password;
+//mongodb connection Uri
+const MONGODB_URI = `mongodb+srv://${username}:${password}@cluster0.o8mxmhh.mongodb.net/crypto`;
 
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`)
-  });
+//import routes
+const establishmentRoutes = require('./routes/establishment');
+
+
+app.use(bodyParser.json());
+
+app.use(establishmentRoutes);
+
+const connectDB = async () => {
+    try {
+      //if try works
+      await mongoose.connect(MONGODB_URI);
+      console.log("Mongodb Connected...");
+      const server = app.listen(3000);
+      console.log("Server is listening on port 3000");
+
+    } catch (err) {
+      //if try fails
+      err.statusCode = 500;
+      console.log(err);
+      //exit process with failure
+      process.exit(1);
+    }
+  };
+  
+  connectDB();
