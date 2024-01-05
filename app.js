@@ -16,7 +16,13 @@ const MONGODB_URI = `mongodb+srv://${username}:${password}@cluster0.o8mxmhh.mong
 //import routes
 const establishmentRoutes = require('./routes/establishment');
 
-
+app.use((req, res, next) => {
+    // Fix CORS error
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+    next();
+  });
 app.use(bodyParser.json());
 
 app.use(establishmentRoutes);
