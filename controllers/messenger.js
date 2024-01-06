@@ -51,22 +51,12 @@ exports.readSentMessages = async (req, res, next) =>{
 exports.readReceivedMessages = async (req,res, next) => { 
     //get all messages where the receiver is the public key of this user
     const receiver = req.body.receiver;
-    //find the user
-    let user = await User.findOne({public_key: receiver}).populate('messages');
-    if(user)
-    {
-        //get the messages
-        const messages = user.messages;
-        //send the messages
-        res.status(200).json({
-            messages: messages
-        });
-
-    }else{
-        //user not found
-        res.status(404).json({
-            message: 'User not found'
-        });
-    }
+    console.log(receiver);
+    //find the messages of the receiver
+    let messages = await Message.find({receiver_key: receiver});
+    //send the messages
+    res.status(200).json({
+        messages: messages
+    });
 }
 
