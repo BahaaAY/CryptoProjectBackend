@@ -33,12 +33,12 @@ exports.sendMessage = async (req, res, next) =>
     
 };
 
-exports.readSentMessages = async (req, res, next) =>{
+exports.readOutBox = async (req, res, next) =>{
 
     //get all messages of the user
-    const phone = req.body.phone;
+    const sender = req.body.sender;
     //find the user
-    let user = await User.findOne({phone: phone}).populate('messages');
+    let user = await User.findOne({public_key: sender}).populate('messages');
     //get the messages
     const messages = user.messages;
     //send the messages
@@ -48,7 +48,7 @@ exports.readSentMessages = async (req, res, next) =>{
 
 };
 
-exports.readReceivedMessages = async (req,res, next) => { 
+exports.readInbox = async (req,res, next) => { 
     //get all messages where the receiver is the public key of this user
     const receiver = req.body.receiver;
     console.log(receiver);
