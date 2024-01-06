@@ -1,3 +1,5 @@
+
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 exports.connect = async (req, res, next) => {
@@ -6,10 +8,12 @@ exports.connect = async (req, res, next) => {
     const phone = req.body.phone;
     const public_key = req.body.public_key;
     console.log("public key: ",public_key);
-   
+
+    //hash the phone number with bcrypt to store it in the database securely 12 is the number of rounds of hashing
+   const hashedPhone = await bcrypt.hash(phone, 12);
     //create a new user
     const user = new User({
-        phone: phone,
+        phone: hashedPhone,
         public_key: public_key
     });
     try{
@@ -32,12 +36,15 @@ exports.connect = async (req, res, next) => {
 
 //check if the user is in the database
 exports.check = async (req, res, next) => {
-    //post request with the body of the request containing phone number
+    //post request with the body of the request containing phone number ( as plain text)
     const phone = req.body.phone;
+    //hash the phone number with bcrypt
+    const hashedPhone = await bcrypt.hash(phone, 12);
+    
    
     try{
     //find user with phone number
-        let user = await User.findOne({phone: phone});
+        let user = await User.findOne({phone: hashedPhone});
         //if user exists
         if(user)
         {
